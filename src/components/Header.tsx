@@ -3,9 +3,9 @@ import { Navbar, Container } from "react-bootstrap";
 export function Header() {
     return (
         <header>
-            <Navbar className="bg-body-tertiary">
+            <Navbar bg="dark" data-bs-theme="dark" className="bg-body-tertiary">
                 <Container>
-                    <Navbar.Brand href="#home">
+                    <Navbar.Brand>
                         <img
                             alt=""
                             src="/logo.svg"

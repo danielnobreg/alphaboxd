@@ -1,15 +1,15 @@
-import express from "express";
-import FilmeRouter from "./router/FilmeRouter.js";
+import express from 'express';
+import MovieRoutes from './router/MovieRoutes.js';
 import db from "./db/db.js";
-
+import cors from "cors";
 const server = express();
 const port = 5000;
-
+server.use(cors());
 server.use(express.json());
-server.use(FilmeRouter);
+server.use(MovieRoutes);
 
-db.sync().then(()=> {
-    server.listen(port, ()=> {
-        console.log(`server listening on port: ${port}`);
+db.sync().then(()=>{
+    server.listen(port, ()=>{
+        console.log(`Server running on port: ${port}`);
     });
 });

@@ -9,7 +9,8 @@ export default db.define("movies", {
         allowNull: false,
     },
     moviePosterUrl: {
-        type: BLOB('medium'),
+        type: DataTypes.STRING(255),
+        // type: BLOB('medium'),
         allowNull: false,
     },
     title: {

@@ -23,7 +23,7 @@ export default class FilmeController {
             const filme = await FilmeModel.findByPk(id);
 
             if (!filme) {
-                return response.status(404).json({ error: 'Filme nao encontrado' });
+                return response.status(404).json({ error: 'Filme não encontrado' });
             }
 
             response.status(200).json(filme);
@@ -33,22 +33,22 @@ export default class FilmeController {
     }
 
     static async save(request, response) {
-        const { titulo, ator, faixa_etaria, genero } = request.body;
+        const { moviePosterUrl, title, actors, ageRange, genre } = request.body;
 
-        if (!titulo || !ator|| !faixa_etaria || !genero) {
-            return response.status(400).json({ error: 'Todos atributos (titulo, autor, faixa_etaria, genero) sao requeridos' });
+        if (!moviePosterUrl || !title || !actors || !ageRange || !genre) {
+            return response.status(400).json({ error: 'Todos os atributos (moviePosterUrl, title, actors, ageRange, genre) são requeridos' });
         }
 
         try {
             const filmeExistente = await FilmeModel.findOne({
-                where: { titulo, ator}
+                where: { title, actors }
             });
 
             if (filmeExistente) {
-                return response.status(409).json({ error: 'Um filme com este titulo ja existe' });
+                return response.status(409).json({ error: 'Um filme com este título já existe' });
             }
 
-            const filme = { titulo, ator, faixa_etaria, genero };
+            const filme = { moviePosterUrl, title, actors, ageRange, genre };
             const filmeCriado = await FilmeModel.create(filme);
 
             response.status(201).json({ filme: filmeCriado });
@@ -57,46 +57,46 @@ export default class FilmeController {
         }
     }
 
-
-    static async update (request, response) {
-        const {id} = request.params;
-        const {titulo, autor, faixa_etaria, genero} = request.body;
+    static async update(request, response) {
+        const { id } = request.params;
+        const { moviePosterUrl, title, actors, ageRange, genre } = request.body;
 
         try {
-           const filme = await FilmeModel.findByPk(id); 
+            const filme = await FilmeModel.findByPk(id);
 
             if (!filme) {
-                return response.status(404).json({ erro: 'Filme nao encontrado'});
+                return response.status(404).json({ error: 'Filme não encontrado' });
             }
 
-            filme.titulo = titulo;
-            filme.autor = autor;
-            filme.faixa_etaria = faixa_etaria;
-            filme.genero = genero;
+            filme.moviePosterUrl = moviePosterUrl;
+            filme.title = title;
+            filme.actors = actors;
+            filme.ageRange = ageRange;
+            filme.genre = genre;
 
             await filme.save();
 
-            response.status(200).json ({filme});
+            response.status(200).json({ filme });
         } catch (error) {
-            response.status(500).json ({erro: 'Erro ao atualizar filme'});
+            response.status(500).json({ error: 'Erro ao atualizar filme', details: error.message });
         }
     }
 
     static async deleteById(request, response) {
-    const { id } = request.params;
+        const { id } = request.params;
 
-    try {
-        const filme = await FilmeModel.findByPk(id);
+        try {
+            const filme = await FilmeModel.findByPk(id);
 
-        if (!filme) {
-            return response.status(404).json({ error: 'Filme nao encontrado' });
+            if (!filme) {
+                return response.status(404).json({ error: 'Filme não encontrado' });
+            }
+
+            await filme.destroy();
+
+            response.status(204).send(); // No content response
+        } catch (error) {
+            response.status(500).json({ error: 'Erro ao deletar filme', details: error.message });
         }
-
-        await filme.destroy();
-
-        response.status(204).send(); // No content response
-    } catch (error) {
-        response.status(500).json({ error: 'Erro ao deletar filme' });
     }
-}
 }
